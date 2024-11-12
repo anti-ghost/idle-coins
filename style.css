@@ -1,0 +1,138 @@
+body {
+  font-family: sans-serif;
+  margin: 32px;
+  text-align: center;
+}
+
+td {
+  padding: 0;
+}
+
+.center {
+  margin: auto;
+  text-align: center;
+}
+
+.wide {
+  width: 100%;
+}
+
+button {
+  font-size: 16px;
+  color: black;
+  background-color: #f2f2f2;
+  border: 1px solid #127a20;
+  border-radius: 4px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+button:hover {
+  color: white;
+  background-color: #5ac467;
+}
+
+.locked {
+  color: black;
+  background-color: #a3a3a3;
+  border: 1px solid #b84b5f;
+  cursor: default;
+}
+
+.locked:hover {
+  background-color: #b84b5f;
+}
+
+.tabButton {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+  background-color: #f2f2f2;
+  height: 32px;
+  border: 2px solid #4980cc;
+  border-radius: 4px;
+  margin: 0 2px 0 2px;
+}
+
+.tabButton:hover {
+  background-color: #4980cc;
+  color: white;
+}
+
+#factorList {
+  width: 100%;
+  text-align: left;
+}
+
+.optionsButton {
+  width: 220px;
+  height: 55px;
+  margin: 5px 8px;
+  font-size: 20px;
+}
+
+.achievement {
+  background-color: #a3a3a3;
+  width: 106px;
+  height: 106px;
+  border: 2px solid #b84b5f;
+  border-radius: 8px;
+  margin: 6px 8px;
+}
+
+.earned {
+  background-color: #5ac467;
+  border-color: #127a20;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tableRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.completedRow {
+  background-color: #007308;
+  border-radius: 10px;
+}
+
+[tooltip] {
+  position: relative;
+  z-index: 2;
+}
+
+[tooltip]:before,
+[tooltip]:after {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+[tooltip]:before {
+  font-size: 16px;
+  position: absolute;
+  bottom: 102px;
+  /*margin-bottom: -60pt;*/
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 8px;
+  width: 200px;
+  background-color: #f2f2f2;
+  content: attr(tooltip);
+  transition-duration: 0.3s;
+  z-index: 2;
+  left: 50%;
+  transform: translate(-50%);
+  pointer-events: none;
+}
+
+[tooltip]:hover:before {
+  visibility: visible;
+  opacity: 1;
+  bottom: 110px;
+}
