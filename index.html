@@ -2,12 +2,117 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Idle Coins</title>
-    <script src="game.js" defer></script>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/vue@3.5.12/dist/vue.global.js"
+      defer
+    ></script>
+    <script src="/jquery.js" defer></script>
+    <script src="/notify.js" defer></script>
+    <script src="/break_infinity.js" defer></script>
+    <script src="/vue.js" defer></script>
+    <script src="/saveload.js" defer></script>
+    <script src="/achievements.js" defer></script>
+    <script src="/workers.js" defer></script>
+    <script src="/game.js" defer></script>
   </head>
-  <body>
-    <div id="app">
-      You have 10 coins
+  <body onload="init()">
+    <p>
+      You have
+      <b style="font-size: 32px; color: gold">{{format(p.coins, 2)}}</b>
+      coins.
+    </p>
+    <p>You are getting {{format(getCoinGain(), 2, 2)}} coins per second.</p>
+    <p>
+      <button class="tabButton" @click="tab = 0">Workers</button>
+      <button class="tabButton" @click="tab = 1">Options</button>
+      <button class="tabButton" @click="tab = 2">Statistics</button>
+      <button class="tabButton" @click="tab = 3">Achievements</button>
+    </p>
+    <div v-if="tab == 0">
+      <p>
+        You have {{format(p.workers, 2)}} Workers. Each Worker generates 1 coin
+        per second base.<br />
+        <button
+          :class="{locked: !canBuyWorker()}"
+          @click="buyWorker()"
+          style="width: 300px; margin-top: 8px"
+        >
+          Worker Cost: {{format(getWorkerCost(), 2)}} coins
+        </button>
+      </p>
+      <div class="table" id="factorList" v-if="p.factors.length > 0">
+        <div
+          v-for="i in p.factors.length"
+          class="tableRow wide"
+          style="margin-top: 8px"
+        >
+          <div style="width: 33%">Factor {{i}}</div>
+          <div style="width: 33%">x{{format(getFactorMult(i - 1), 2, 2)}}</div>
+          <div style="width: 33%">
+            <button
+              class="wide"
+              :class="{locked: !canBuyFactor(i - 1)}"
+              @click="buyFactor(i - 1)"
+            >
+              Cost: {{format(getFactorCost(i - 1), 2)}} coins
+            </button>
+          </div>
+        </div>
+      </div>
+      <p v-if="getTotalFactorMult().gt(1)">
+        Your Factors are multipling your coin gains by
+        x{{format(getTotalFactorMult(), 2, 2)}}.
+      </p>
+      <p v-if="inflationActive()">
+        <b>Due to inflation, Factor costs increase faster above 1e12 coins!</b>
+      </p>
+    </div>
+    <div v-if="tab == 1">
+      <div class="table">
+        <div class="tableRow">
+          <button class="optionsButton" @click="exportSave()">
+            Export save
+          </button>
+          <button class="optionsButton" @click="importSave()">
+            Import save
+          </button>
+        </div>
+        <div class="tableRow">
+          <button class="optionsButton" @click="save(true)">Save game</button>
+          <button class="optionsButton" @click="hardReset()">
+            RESET THE GAME
+          </button>
+        </div>
+      </div>
+    </div>
+    <div v-if="tab == 2">
+      <p>
+        Your best coins is {{format(p.bestCoins, 2)}}.<br />
+        You have made a total of {{format(p.totalCoins, 2)}} coins.<br />
+        You have played for {{formatTime(p.timePlayed)}}.
+      </p>
+    </div>
+    <div v-if="tab == 3">
+      <p>You have {{p.achievements.length}} Achievements.</p>
+      <div class="table">
+        <div
+          v-for="row in achievements"
+          class="tableRow"
+          :class="{completedRow: rowCompleted(row)}"
+        >
+          <div
+            v-for="achievement in row"
+            class="achievement"
+            :class="{earned: p.achievements.includes(achievement.id)}"
+            :tooltip="achievement.tooltip"
+          >
+            {{achievement.name}}
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
